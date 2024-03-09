@@ -13,8 +13,37 @@ public class ExampleTests
 
         Assert.Equal(0, soa.Length);
         Assert.Equal(2, soa.Capacity);
+        Assert.Empty(soa.A);
+        Assert.Empty(soa.B);
+        Assert.Empty(soa.IsSus);
+
         Assert.Equal(2, soa2.Length);
         Assert.Equal(2, soa2.Capacity);
+        Assert.Equal(2, soa.A.Count());
+        Assert.Equal(2, soa.B.Count());
+        Assert.Equal(2, soa.IsSus.Count());
+    }
+
+    [Fact]
+    public void Get_Should_Return_A_Single_Item_With_The_Correct_Values()
+    {
+        var soa = new ExampleSOA([
+            new Example(1, 1, true),
+            new Example(2, 2, false),
+        ]);
+
+        Assert.Equal(2, soa.Length);
+        Assert.Equal(2, soa.Capacity);
+
+        var item = soa[0];
+        Assert.Equal(1, (int)item.A);
+        Assert.Equal(1, (int)item.B);
+        Assert.True(item.IsSus);
+
+        item = soa[1];
+        Assert.Equal(2, (int)item.A);
+        Assert.Equal(2, (int)item.B);
+        Assert.False(item.IsSus);
     }
 
     [Fact]
@@ -25,11 +54,11 @@ public class ExampleTests
         Assert.Equal(1, soa.Capacity);
 
         var example = new Example(1f, 1f, true);
-        soa.Set(0, example);
+        soa[0] = example;
 
-        var val = soa.Get(0);
-        Assert.Equal(1, (int)val.MeasurementA);
-        Assert.Equal(1, (int)val.MeasurementB);
+        var val = soa[0];
+        Assert.Equal(1, (int)val.A);
+        Assert.Equal(1, (int)val.B);
         Assert.True(val.IsSus);
     }
 
@@ -44,11 +73,14 @@ public class ExampleTests
         Assert.Equal(2, soa.Capacity);
 
         var example = new Example(3, 3, true);
-        soa.Set(1, example);
+        soa[1] = example;
 
-        var val = soa.Get(1);
-        Assert.Equal(3, (int)val.MeasurementA);
-        Assert.Equal(3, (int)val.MeasurementB);
+        var val = soa[1];
+        Assert.Equal(3, (int)val.A);
+        Assert.Equal(3, (int)val.B);
         Assert.True(val.IsSus);
+
+        var array = soa.ToExampleArray();
+        Assert.Equal(2, array.Length);
     }
 }
